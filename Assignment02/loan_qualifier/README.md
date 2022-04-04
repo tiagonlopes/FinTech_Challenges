@@ -10,11 +10,11 @@ Describe the technologies required to use your project such as programming langu
 
 In order to run this application you need to use Python, independently of the OS used. You alson need the below packages:
 
-> Path
-> sys
-> fire
-> questionaire
-> csv
+- Path
+- sys
+- fire
+- questionaire
+- csv
 
 ---
 
@@ -22,7 +22,7 @@ In order to run this application you need to use Python, independently of the OS
 
 The installation of any of the above python packages can be performed with the following command:
 
-"pip install <package-name>"
+"pip install < package-name >"
 
 ---
 
