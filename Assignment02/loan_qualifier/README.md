@@ -22,7 +22,7 @@ In order to run this application you need to use Python, independently of the OS
 
 The installation of any of the above python packages can be performed with the following command:
 
-"pip install < package-name >"
+"pip install [<package-name>]"
 
 ---
 
@@ -33,3 +33,13 @@ This section should include screenshots, code blocks, or animations explaining h
 The usage of the application is easy. By following up the application questionaire you will be able to input all the correct information that will be used to assess the loan availability.
 
 ---
+
+## Contributors
+
+The main contributor for the entire project was the owner of the repository.
+
+---
+
+## License
+
+This projects should be used just a way to filter and search for loans that may answer your need. It will not grant any access to those specifics loans, it just helps narrowing down which options you should try.
