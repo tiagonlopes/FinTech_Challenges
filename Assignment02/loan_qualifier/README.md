@@ -1,4 +1,4 @@
-# Project Title
+# Loan Finder Project
 
 This project aims to show the users what loans are available in the market. For that the application use as input data the requested amount as well as other factors to take into consideration at the moment of requesting a loan such as: time of the loan, collateral, credit score and ability to repay the debt.
 
