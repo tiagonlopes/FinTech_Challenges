@@ -15,7 +15,7 @@ The project was created in jupyter notebooks in order to facilitate the interact
 
 ## Data
 
-The data is included on the folder Resources, however if you would like to adapt your code to another set of data, it should be quite easy. This data has pricing information of the two different exchanges tools, like:
+The data is included on the folder Resources, however if you would like to adapt your code to another set of data, it should be quite easy. This data has pricing information of the two different exchanges tools, like:\n
     - Open
     - High
     - Low
