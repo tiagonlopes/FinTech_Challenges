@@ -1,22 +1,32 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.5;
 
 import "./KaseiCoin.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/crowdsale/Crowdsale.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/crowdsale/emission/MintedCrowdsale.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/crowdsale/validation/CappedCrowdsale.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/crowdsale/validation/TimedCrowdsale.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/crowdsale/distribution/RefundablePostDeliveryCrowdsale.sol";
 
 
 // Have the KaseiCoinCrowdsale contract inherit the following OpenZeppelin:
 // * Crowdsale
 // * MintedCrowdsale
-contract KaseiCoinCrowdsale is Crowdsale, MintedCrowdsale{ // UPDATE THE CONTRACT SIGNATURE TO ADD INHERITANCE
+contract KaseiCoinCrowdsale is Crowdsale, MintedCrowdsale, CappedCrowdsale, TimedCrowdsale, RefundablePostDeliveryCrowdsale  { // UPDATE THE CONTRACT SIGNATURE TO ADD INHERITANCE
     
     // Provide parameters for all of the features of your crowdsale, such as the `rate`, `wallet` for fundraising, and `token`.
     constructor(
-        // YOUR CODE HERE!
-        uint rate,
-        address payable wallet,
-        KaseiCoin token
-    ) public Crowdsale(rate, wallet, token) {
+        uint rate,//rate in KaseiCoin
+        address payable wallet, //benificiary of crowdsale
+        KaseiCoin token, // the token that the crowdsale will work with
+        uint goal,
+        uint open,
+        uint close
+    )
+        Crowdsale(rate, wallet, token)
+        CappedCrowdsale(goal)
+        TimedCrowdsale(open, close)
+        RefundableCrowdsale(goal) 
+        public {
         // constructor can stay empty
     }
 }
@@ -24,35 +34,33 @@ contract KaseiCoinCrowdsale is Crowdsale, MintedCrowdsale{ // UPDATE THE CONTRAC
 
 contract KaseiCoinCrowdsaleDeployer {
     // Create an `address public` variable called `kasei_token_address`.
-    // YOUR CODE HERE!
+    address public kasei_token_address; // stores the KaseiCoin Address
     // Create an `address public` variable called `kasei_crowdsale_address`.
-    // YOUR CODE HERE!
-    address public kasei_token_address;
-    address public kasei_crowdsale_address;
+    address public kasei_crowdsale_address;// stores the Address where the contract has been deployed
 
     // Add the constructor.
     constructor(
-       // YOUR CODE HERE!
        string memory name,
        string memory symbol,
-       address payable wallet
+       address payable wallet,  //benificiary of crowdsale
+       uint goal
     ) public {
         // Create a new instance of the KaseiCoin contract.
-        KaseiCoin token = new KaseiCoin(name,symbol, 0);
+        KaseiCoin kaseitoken = new KaseiCoin(name,symbol,0);
         
         // Assign the token contract’s address to the `kasei_token_address` variable.
-        kasei_token_address = address(token);
+        kasei_token_address = address(kaseitoken);
 
         // Create a new instance of the `KaseiCoinCrowdsale` contract
-        KaseiCoinCrowdsale kasei_sale = new KaseiCoinCrowdsale (1,wallet,token);
+        KaseiCoinCrowdsale kasei_crowdsale = new KaseiCoinCrowdsale(1, wallet, kaseitoken, goal, now, now + 24 weeks);
             
-        // Aassign the `KaseiCoinCrowdsale` contract’s address to the `kasei_crowdsale_address` variable.
-        kasei_token_address = address(kasei_sale);
+        // Assign the `KaseiCoinCrowdsale` contract’s address to the `kasei_crowdsale_address` variable.
+        kasei_crowdsale_address = address(kasei_crowdsale);
 
         // Set the `KaseiCoinCrowdsale` contract as a minter
-        token.addMinter(kasei_token_address);
-        
+        kaseitoken.addMinter(kasei_crowdsale_address);
+    
         // Have the `KaseiCoinCrowdsaleDeployer` renounce its minter role.
-        token.renounceMinter();
+        kaseitoken.renounceMinter();
     }
 }
